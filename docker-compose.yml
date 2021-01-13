@@ -1,0 +1,22 @@
+n-server:
+  build: .
+  dockerfile: ./docker/server.dockerfile
+  container_name: n-server
+  volumes:
+    - .:/var/www/html
+    - ./docker/config/apache/sites/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+  ports:
+    - "9210:80"
+  links:
+    - n-pgsql
+
+
+n-pgsql:
+  image: postgres
+  container_name: n-pgsql
+  ports:
+    - "9211:5432"
+  environment:
+    - POSTGRES_PASSWORD=password
+  volumes:
+    - ./docker/database/pgsql:/var/lib/postgresql/data
